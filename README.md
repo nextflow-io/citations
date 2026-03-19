@@ -13,34 +13,38 @@ bioinformatics workflow management systems.
 | **Without Galaxy** | [PNG](dimensions/fig1_nogalaxy_absolute.png) / [SVG](dimensions/fig1_nogalaxy_absolute.svg) | [PNG](dimensions/fig1_nogalaxy_percent.png) / [SVG](dimensions/fig1_nogalaxy_percent.svg) |
 | **With Galaxy**    | [PNG](dimensions/fig1_absolute.png) / [SVG](dimensions/fig1_absolute.svg)                   | [PNG](dimensions/fig1_percent.png) / [SVG](dimensions/fig1_percent.svg)                   |
 
-> Also available from [OpenAlex](openalex/) data: [absolute](openalex/fig1_nogalaxy_absolute.png) / [percent](openalex/fig1_nogalaxy_percent.png) / [with Galaxy](openalex/fig1_absolute.png)
+> Also available from [OpenAlex](openalex/) and [iCite](icite/) data
 
 ## Quick start
 
 ```bash
 # 1. Fetch citation data from OpenAlex (free API, ~30 seconds)
-python fetch_openalex.py
+uv run fetch_openalex.py
 
 # 2. Fetch citation data from Dimensions (browser scraping, ~5 minutes)
-uv run --with playwright python fetch_dimensions.py
+uv run fetch_dimensions.py
 
-# 3. Generate plots and CSVs
-python generate_plots.py
+# 3. Fetch citation data from NIH iCite (free API, ~30 seconds)
+uv run fetch_icite.py
+
+# 4. Generate plots and CSVs for all sources
+uv run generate_plots.py
 ```
 
 ## Data sources
 
-| Source           | Per-year data | API key needed | Method                                                            |
-| ---------------- | ------------- | -------------- | ----------------------------------------------------------------- |
-| **OpenAlex**     | Yes           | No             | REST API                                                          |
-| **Dimensions**   | Yes           | No             | Browser scraping (Highcharts extraction from badge.dimensions.ai) |
-| CrossRef         | Totals only   | No             | REST API                                                          |
-| Google Scholar   | Totals only   | No             | `scholarly` library (very slow, gets rate-limited)                |
-| Semantic Scholar | Unreliable    | No             | Free API returns incomplete citation subsets                      |
-| Altmetric        | No            | Yes (403)      | N/A                                                               |
-| Scopus           | Yes           | Yes            | Used in original paper but requires institutional access          |
+| Source           | Per-year data | API key needed | Method                                                            | Coverage |
+| ---------------- | ------------- | -------------- | ----------------------------------------------------------------- | -------- |
+| **OpenAlex**     | Yes           | No             | REST API                                                          | 23/23 papers |
+| **Dimensions**   | Yes           | No             | Browser scraping (Highcharts extraction from badge.dimensions.ai) | 21/23 papers |
+| **iCite**        | Yes           | No             | NIH iCite API (PubMed-based)                                     | 19/23 papers |
+| CrossRef         | Totals only   | No             | REST API                                                          | — |
+| Google Scholar   | Totals only   | No             | `scholarly` library (very slow, gets rate-limited)                | — |
+| Semantic Scholar | Unreliable    | No             | Free API returns incomplete citation subsets                      | — |
+| Altmetric        | No            | Yes (403)      | N/A                                                               | — |
+| Scopus           | Yes           | Yes            | Used in original paper but requires institutional access          | — |
 
-**OpenAlex** and **Dimensions** are the two best free sources with per-year breakdowns.
+**OpenAlex**, **Dimensions**, and **iCite** are the three free sources with per-year breakdowns. OpenAlex has the best coverage.
 
 ## Papers included
 
@@ -95,11 +99,11 @@ python generate_plots.py
 
 ## Notes
 
-- **OpenAlex vs Dimensions**: Both sources agree closely on trends. Dimensions may have slightly better coverage for very recent years.
+- **Source comparison**: All three sources agree on the overall trend. OpenAlex has the best coverage (23/23 papers). Dimensions is missing per-year data for Snakemake 2021 and CWL v1.0. iCite is missing 4 papers without PMIDs (preprints, Figshare, some conference proceedings).
 - **Year range**: Edit `YEAR_MIN` / `YEAR_MAX` in each script to extend the range.
-- **Adding papers**: Add new entries to the `PAPERS` list in `fetch_openalex.py` and `fetch_dimensions.py`, then re-run all three scripts.
+- **Adding papers**: Add new entries to the `PAPERS` list in all three `fetch_*.py` scripts, then re-run all four scripts.
 - **Dimensions scraping**: The `fetch_dimensions.py` script extracts data from Highcharts charts on badge.dimensions.ai. If their page structure changes, the JS extraction (`window._Highcharts`) may need updating. As a fallback, use the Playwright MCP in Claude Code to manually navigate and extract data (see below).
-- **Snakemake 2021 on Dimensions**: This paper (`10.12688/f1000research.29032.2`) sometimes loads on Dimensions but doesn't render a per-year chart. The total is available via their metrics API at `https://metrics-api.dimensions.ai/doi/{DOI}`.
+- **iCite**: Only covers PubMed-indexed papers. Uses the `citedByPmidsByYear` field which gives exact per-year counts. Some papers need PMID overrides (DOI lookup fails) — these are hardcoded in `fetch_icite.py`.
 
 ## Manual Dimensions extraction (Claude Code fallback)
 
