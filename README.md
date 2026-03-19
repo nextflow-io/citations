@@ -4,6 +4,17 @@ Regenerates Supplementary Figure 1 from "Empowering bioinformatics communities w
 Nextflow and nf-core" (Langer et al. 2025), showing per-year citation counts for
 bioinformatics workflow management systems.
 
+![WfMS citation counts 2018-2025](dimensions/fig1_nogalaxy_absolute.png)
+
+### Download plots
+
+|                    | Absolute                                                                                    | Percentage                                                                                |
+| ------------------ | ------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| **Without Galaxy** | [PNG](dimensions/fig1_nogalaxy_absolute.png) / [SVG](dimensions/fig1_nogalaxy_absolute.svg) | [PNG](dimensions/fig1_nogalaxy_percent.png) / [SVG](dimensions/fig1_nogalaxy_percent.svg) |
+| **With Galaxy**    | [PNG](dimensions/fig1_absolute.png) / [SVG](dimensions/fig1_absolute.svg)                   | [PNG](dimensions/fig1_percent.png) / [SVG](dimensions/fig1_percent.svg)                   |
+
+> Also available from [OpenAlex](openalex/) data: [absolute](openalex/fig1_nogalaxy_absolute.png) / [percent](openalex/fig1_nogalaxy_percent.png) / [with Galaxy](openalex/fig1_absolute.png)
+
 ## Quick start
 
 ```bash
@@ -19,69 +30,68 @@ python generate_plots.py
 
 ## Data sources
 
-| Source | Per-year data | API key needed | Method |
-|--------|--------------|----------------|--------|
-| **OpenAlex** | Yes | No | REST API |
-| **Dimensions** | Yes | No | Browser scraping (Highcharts extraction from badge.dimensions.ai) |
-| CrossRef | Totals only | No | REST API |
-| Google Scholar | Totals only | No | `scholarly` library (very slow, gets rate-limited) |
-| Semantic Scholar | Unreliable | No | Free API returns incomplete citation subsets |
-| Altmetric | No | Yes (403) | N/A |
-| Scopus | Yes | Yes | Used in original paper but requires institutional access |
+| Source           | Per-year data | API key needed | Method                                                            |
+| ---------------- | ------------- | -------------- | ----------------------------------------------------------------- |
+| **OpenAlex**     | Yes           | No             | REST API                                                          |
+| **Dimensions**   | Yes           | No             | Browser scraping (Highcharts extraction from badge.dimensions.ai) |
+| CrossRef         | Totals only   | No             | REST API                                                          |
+| Google Scholar   | Totals only   | No             | `scholarly` library (very slow, gets rate-limited)                |
+| Semantic Scholar | Unreliable    | No             | Free API returns incomplete citation subsets                      |
+| Altmetric        | No            | Yes (403)      | N/A                                                               |
+| Scopus           | Yes           | Yes            | Used in original paper but requires institutional access          |
 
 **OpenAlex** and **Dimensions** are the two best free sources with per-year breakdowns.
 
 ## Papers included
 
 ### Galaxy
-| DOI | Label |
-|-----|-------|
-| `10.1093/nar/gkae410` | Galaxy 2024 update |
-| `10.1093/nar/gkac247` | Galaxy 2022 update |
-| `10.1093/nar/gkaa434` | Galaxy 2020 update |
-| `10.1093/nar/gky379` | Galaxy 2018 update |
-| `10.1093/nar/gkw343` | Galaxy 2016 update |
-| `10.1186/gb-2012-13-10-r86` | Galaxy 2012 |
-| `10.1186/gb-2010-11-8-r86` | Galaxy 2010 |
-| `10.1101/gr.4086505` | Galaxy 2005 |
+| DOI                         | Label              |
+| --------------------------- | ------------------ |
+| `10.1093/nar/gkae410`       | Galaxy 2024 update |
+| `10.1093/nar/gkac247`       | Galaxy 2022 update |
+| `10.1093/nar/gkaa434`       | Galaxy 2020 update |
+| `10.1093/nar/gky379`        | Galaxy 2018 update |
+| `10.1093/nar/gkw343`        | Galaxy 2016 update |
+| `10.1186/gb-2012-13-10-r86` | Galaxy 2012        |
+| `10.1186/gb-2010-11-8-r86`  | Galaxy 2010        |
+| `10.1101/gr.4086505`        | Galaxy 2005        |
 
 ### Nextflow
-| DOI | Label |
-|-----|-------|
-| `10.1038/s41587-020-0439-x` | nf-core framework (2020) |
-| `10.1038/nbt.3820` | Nextflow enables reproducible workflows (2017) |
-| `10.1186/s13059-025-03673-9` | Empowering bioinformatics communities (2025) |
-| `10.1101/2024.05.10.592912` | Same paper, preprint version |
+| DOI                          | Label                                          |
+| ---------------------------- | ---------------------------------------------- |
+| `10.1038/s41587-020-0439-x`  | nf-core framework (2020)                       |
+| `10.1038/nbt.3820`           | Nextflow enables reproducible workflows (2017) |
+| `10.1186/s13059-025-03673-9` | Empowering bioinformatics communities (2025)   |
+| `10.1101/2024.05.10.592912`  | Same paper, preprint version                   |
 
 ### Snakemake
-| DOI | Label |
-|-----|-------|
+| DOI                              | Label                                           |
+| -------------------------------- | ----------------------------------------------- |
 | `10.12688/f1000research.29032.2` | Sustainable data analysis with Snakemake (2021) |
-| `10.1093/bioinformatics/bts480` | Snakemake workflow engine (2012) |
+| `10.1093/bioinformatics/bts480`  | Snakemake workflow engine (2012)                |
 
 ### CWL (shown separately from Other)
-| DOI | Label |
-|-----|-------|
-| `10.1038/nbt.3772` | Toil |
+| DOI                              | Label    |
+| -------------------------------- | -------- |
+| `10.1038/nbt.3772`               | Toil     |
 | `10.6084/m9.figshare.3115156.v2` | CWL v1.0 |
 
 ### Other
-| DOI | Label |
-|-----|-------|
-| `10.1016/j.jbiotec.2017.07.028` | KNIME reproducible |
-| `10.1145/1656274.1656280` | KNIME 2.0 |
-| `10.1007/978-3-030-28954-6_1` | KNIME data analysis |
-| `10.1093/bioinformatics/bts167` | Bpipe |
-| `10.1093/bioinformatics/btx152` | Pachyderm |
-| `10.1093/gigascience/giz044` | SciPipe |
-| `10.1101/201178` | Cromwell/GATK4 |
+| DOI                             | Label               |
+| ------------------------------- | ------------------- |
+| `10.1016/j.jbiotec.2017.07.028` | KNIME reproducible  |
+| `10.1145/1656274.1656280`       | KNIME 2.0           |
+| `10.1007/978-3-030-28954-6_1`   | KNIME data analysis |
+| `10.1093/bioinformatics/bts167` | Bpipe               |
+| `10.1093/bioinformatics/btx152` | Pachyderm           |
+| `10.1093/gigascience/giz044`    | SciPipe             |
+| `10.1101/201178`                | Cromwell/GATK4      |
 
 ## Plot description
 
-- **Stacked area charts** with Nextflow (#2DC09C) on top, then Snakemake, CWL, and Other in grey shades
-- **Two variants**: with Galaxy (folded into Other) and without Galaxy
+- **Stacked area charts** with Nextflow (#2DC09C) on top, then Galaxy (blue), Snakemake, CWL, and Other in grey shades
+- **Two variants**: with Galaxy as a separate category, and without Galaxy
 - **Two scales**: absolute citation counts and 100% stacked (percentage)
-- Galaxy is grouped into "Other" rather than shown separately, since the focus is on Nextflow's growth relative to other dedicated workflow managers
 
 ## Notes
 
