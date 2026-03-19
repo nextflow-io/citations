@@ -27,35 +27,38 @@ from pathlib import Path
 
 # fmt: off
 PAPERS = [
-    # (WfMS group, DOI, Label)
+    # (WfMS group, DOIs (list), Label)
+    # Multiple DOIs are summed — needed for F1000Research version splits where
+    # Dimensions treats each revision as a separate record.
     # --- Galaxy ---
-    ("Galaxy", "10.1093/nar/gkae410",             "Galaxy 2024"),
-    ("Galaxy", "10.1093/nar/gkac247",             "Galaxy 2022"),
-    ("Galaxy", "10.1093/nar/gkaa434",             "Galaxy 2020"),
-    ("Galaxy", "10.1093/nar/gky379",              "Galaxy 2018"),
-    ("Galaxy", "10.1093/nar/gkw343",              "Galaxy 2016"),
-    ("Galaxy", "10.1186/gb-2012-13-10-r86",       "Galaxy 2012"),
-    ("Galaxy", "10.1186/gb-2010-11-8-r86",        "Galaxy 2010"),
-    ("Galaxy", "10.1101/gr.4086505",              "Galaxy 2005"),
+    ("Galaxy", ["10.1093/nar/gkae410"],             "Galaxy 2024"),
+    ("Galaxy", ["10.1093/nar/gkac247"],             "Galaxy 2022"),
+    ("Galaxy", ["10.1093/nar/gkaa434"],             "Galaxy 2020"),
+    ("Galaxy", ["10.1093/nar/gky379"],              "Galaxy 2018"),
+    ("Galaxy", ["10.1093/nar/gkw343"],              "Galaxy 2016"),
+    ("Galaxy", ["10.1186/gb-2012-13-10-r86"],       "Galaxy 2012"),
+    ("Galaxy", ["10.1186/gb-2010-11-8-r86"],        "Galaxy 2010"),
+    ("Galaxy", ["10.1101/gr.4086505"],              "Galaxy 2005"),
     # --- Nextflow ---
-    ("Nextflow", "10.1038/s41587-020-0439-x",     "nf-core framework"),
-    ("Nextflow", "10.1038/nbt.3820",              "Nextflow enables reproducible workflows"),
-    ("Nextflow", "10.1186/s13059-025-03673-9",    "Empowering bioinformatics communities 2025"),
-    ("Nextflow", "10.1101/2024.05.10.592912",     "Empowering bioinformatics communities preprint"),
+    ("Nextflow", ["10.1038/s41587-020-0439-x"],     "nf-core framework"),
+    ("Nextflow", ["10.1038/nbt.3820"],              "Nextflow enables reproducible workflows"),
+    ("Nextflow", ["10.1186/s13059-025-03673-9"],    "Empowering bioinformatics communities 2025"),
+    ("Nextflow", ["10.1101/2024.05.10.592912"],     "Empowering bioinformatics communities preprint"),
     # --- Snakemake ---
-    ("Snakemake", "10.12688/f1000research.29032.2", "Snakemake 2021"),
-    ("Snakemake", "10.1093/bioinformatics/bts480",  "Snakemake 2012"),
+    # F1000Research splits versions into separate records; sum both
+    ("Snakemake", ["10.12688/f1000research.29032.1", "10.12688/f1000research.29032.2"], "Snakemake 2021"),
+    ("Snakemake", ["10.1093/bioinformatics/bts480"],  "Snakemake 2012"),
     # --- CWL ---
-    ("CWL", "10.1038/nbt.3772",                   "Toil"),
-    ("CWL", "10.6084/m9.figshare.3115156.v2",     "CWL v1.0"),
+    ("CWL", ["10.1038/nbt.3772"],                   "Toil"),
+    ("CWL", ["10.6084/m9.figshare.3115156.v2"],     "CWL v1.0"),
     # --- Other ---
-    ("Other", "10.1016/j.jbiotec.2017.07.028",    "KNIME reproducible"),
-    ("Other", "10.1145/1656274.1656280",           "KNIME 2.0"),
-    ("Other", "10.1007/978-3-030-28954-6_1",      "KNIME data analysis"),
-    ("Other", "10.1093/bioinformatics/bts167",     "Bpipe"),
-    ("Other", "10.1093/bioinformatics/btx152",     "Pachyderm"),
-    ("Other", "10.1093/gigascience/giz044",        "SciPipe"),
-    ("Other", "10.1101/201178",                    "Cromwell/GATK4"),
+    ("Other", ["10.1016/j.jbiotec.2017.07.028"],    "KNIME reproducible"),
+    ("Other", ["10.1145/1656274.1656280"],           "KNIME 2.0"),
+    ("Other", ["10.1007/978-3-030-28954-6_1"],      "KNIME data analysis"),
+    ("Other", ["10.1093/bioinformatics/bts167"],     "Bpipe"),
+    ("Other", ["10.1093/bioinformatics/btx152"],     "Pachyderm"),
+    ("Other", ["10.1093/gigascience/giz044"],        "SciPipe"),
+    ("Other", ["10.1101/201178"],                    "Cromwell/GATK4"),
 ]
 # fmt: on
 
@@ -81,23 +84,37 @@ async def fetch_paper(page, doi: str, label: str) -> dict | None:
     """Navigate to a Dimensions badge page and extract citation-by-year data."""
     url = f"https://badge.dimensions.ai/details/doi/{doi}"
     try:
-        await page.goto(url, wait_until="networkidle", timeout=20000)
+        await page.goto(url, wait_until="networkidle", timeout=30000)
     except Exception:
-        await page.goto(url, timeout=20000)
+        await page.goto(url, timeout=30000)
 
     # Accept cookies if the dialog appears (first visit only)
     try:
         accept_btn = page.get_by_role("button", name="Accept all")
-        if await accept_btn.is_visible(timeout=2000):
+        if await accept_btn.is_visible(timeout=3000):
             await accept_btn.click()
-            await page.wait_for_timeout(500)
+            await page.wait_for_timeout(1000)
     except Exception:
         pass
 
-    # Check for 404
-    content = await page.content()
-    if "404" in content and "NOT FOUND" in content:
-        print(f"  404 - not found on Dimensions")
+    # Wait for main content to render
+    await page.wait_for_timeout(1000)
+
+    # Check for 404 — look for the specific NOT FOUND heading, not just page content
+    try:
+        not_found = page.locator("text=NOT FOUND")
+        if await not_found.is_visible(timeout=1000):
+            print(f"    404 - not found on Dimensions")
+            return None
+    except Exception:
+        pass
+
+    # Verify the page actually loaded by checking for a heading
+    try:
+        heading = page.locator("h1")
+        await heading.wait_for(timeout=5000)
+    except Exception:
+        print(f"    Page did not load properly")
         return None
 
     # Click the Citations tab
@@ -136,18 +153,24 @@ async def main():
         browser = await p.chromium.launch(headless=True)
         page = await browser.new_page()
 
-        for wfms, doi, label in PAPERS:
+        for wfms, dois, label in PAPERS:
             print(f"Fetching {wfms:10s} | {label}...")
-            by_year = await fetch_paper(page, doi, label)
-            if by_year:
-                # Ensure all years present
-                for y in YEARS:
-                    by_year.setdefault(str(y), 0)
-                results[label] = {"wfms": wfms, "doi": doi, "by_year": by_year}
-                total = sum(by_year.values())
+            # Fetch all DOIs for this paper and sum their per-year counts
+            combined = {str(y): 0 for y in YEARS}
+            any_success = False
+            for doi in dois:
+                print(f"  DOI: {doi}")
+                by_year = await fetch_paper(page, doi, label)
+                if by_year:
+                    any_success = True
+                    for y in YEARS:
+                        combined[str(y)] += by_year.get(str(y), 0)
+            if any_success:
+                results[label] = {"wfms": wfms, "dois": dois, "by_year": combined}
+                total = sum(combined.values())
                 print(f"  OK total={total}")
             else:
-                results[label] = {"wfms": wfms, "doi": doi, "error": "not found or no chart"}
+                results[label] = {"wfms": wfms, "dois": dois, "error": "not found or no chart"}
 
         await browser.close()
 

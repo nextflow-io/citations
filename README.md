@@ -6,6 +6,9 @@ bioinformatics workflow management systems.
 
 ![WfMS citation counts 2018-2025](dimensions/fig1_nogalaxy_absolute.png)
 
+> [!WARNING]
+> Snakemake citation counts are underrepresented in the Dimensions plot above. Dimensions splits F1000Research paper revisions into separate records, and only v1 of the Snakemake 2021 paper (311 citations) has per-year data — v2 (1,643 citations) has no per-year chart. The true Snakemake total is ~65% higher. See [Notes](#notes) for details. OpenAlex plots are not affected.
+
 ### Download plots
 
 |                    | Absolute                                                                                    | Percentage                                                                                |
@@ -36,7 +39,7 @@ uv run generate_plots.py
 | Source           | Per-year data | API key needed | Method                                                            | Coverage |
 | ---------------- | ------------- | -------------- | ----------------------------------------------------------------- | -------- |
 | **OpenAlex**     | Yes           | No             | REST API                                                          | 23/23 papers |
-| **Dimensions**   | Yes           | No             | Browser scraping (Highcharts extraction from badge.dimensions.ai) | 21/23 papers |
+| **Dimensions**   | Yes           | No             | Browser scraping (Highcharts extraction from badge.dimensions.ai) | 22/23 papers |
 | **iCite**        | Yes           | No             | NIH iCite API (PubMed-based)                                     | 19/23 papers |
 | CrossRef         | Totals only   | No             | REST API                                                          | — |
 | Google Scholar   | Totals only   | No             | `scholarly` library (very slow, gets rate-limited)                | — |
@@ -99,7 +102,8 @@ uv run generate_plots.py
 
 ## Notes
 
-- **Source comparison**: All three sources agree on the overall trend. OpenAlex has the best coverage (23/23 papers). Dimensions is missing per-year data for Snakemake 2021 and CWL v1.0. iCite is missing 4 papers without PMIDs (preprints, Figshare, some conference proceedings).
+- **Source comparison**: All three sources agree on the overall trend. OpenAlex has the best coverage (23/23 papers). Dimensions is missing CWL v1.0 (Figshare DOI, not indexed). iCite is missing 4 papers without PMIDs (preprints, Figshare, some conference proceedings).
+- **F1000Research versions**: Dimensions treats each F1000Research revision as a separate record with its own DOI. `fetch_dimensions.py` handles this by fetching all versions and summing their citations. Currently only v1 of Snakemake 2021 renders a per-year chart; v2 has the majority of citations but no chart.
 - **Year range**: Edit `YEAR_MIN` / `YEAR_MAX` in each script to extend the range.
 - **Adding papers**: Add new entries to the `PAPERS` list in all three `fetch_*.py` scripts, then re-run all four scripts.
 - **Dimensions scraping**: The `fetch_dimensions.py` script extracts data from Highcharts charts on badge.dimensions.ai. If their page structure changes, the JS extraction (`window._Highcharts`) may need updating. As a fallback, use the Playwright MCP in Claude Code to manually navigate and extract data (see below).
