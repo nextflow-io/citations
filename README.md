@@ -4,10 +4,10 @@ Regenerates Supplementary Figure 1 from "Empowering bioinformatics communities w
 Nextflow and nf-core" (Langer et al. 2025), showing per-year citation counts for
 bioinformatics workflow management systems.
 
-![WfMS citation counts 2018-2025](dimensions/fig1_nogalaxy_absolute.png)
-
-> [!WARNING]
-> Snakemake citation counts are underrepresented in the Dimensions plot above. Dimensions splits F1000Research paper revisions into separate records, and only v1 of the Snakemake 2021 paper (311 citations) has per-year data — v2 (1,643 citations) has no per-year chart. The true Snakemake total is ~65% higher. See [Notes](#notes) for details. OpenAlex plots are not affected.
+| Dimensions | OpenAlex |
+| :--------: | :------: |
+| ![WfMS citation counts from Dimensions, 2018-2025](dimensions/fig1_nogalaxy_absolute.png) | ![WfMS citation counts from OpenAlex, 2018-2025](openalex/fig1_nogalaxy_absolute.png) |
+| **Warning:** Snakemake citation counts are underrepresented in the Dimensions plot. Dimensions splits F1000Research paper revisions into separate records, and only v1 of the Snakemake 2021 paper (311 citations) has per-year data — v2 (1,643 citations) has no per-year chart. The true Snakemake total is ~65% higher. See [Notes](#notes) for details. | **Warning:** OpenAlex is slow to update, so the most recent year's citation counts will typically lag behind reality for several months after publication. |
 
 ### Download plots
 
