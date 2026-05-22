@@ -15,10 +15,10 @@ The original figure (and methodology) is in the [published supplementary file][s
 
 **Note:** Two DOIs are mis-indexed in Scopus and have been excluded (Galaxy 2012, Pachyderm — see [Notes](#notes)). Four further DOIs are missing (preprints, Figshare, ACM conference proceedings), so 17/23 papers contribute.
 
-|                    | Absolute                                                                            | Percentage                                                                        |
-| ------------------ | ----------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
-| **Without Galaxy** | [PNG](scopus/fig1_nogalaxy_absolute.png) / [SVG](scopus/fig1_nogalaxy_absolute.svg) | [PNG](scopus/fig1_nogalaxy_percent.png) / [SVG](scopus/fig1_nogalaxy_percent.svg) |
-| **With Galaxy**    | [PNG](scopus/fig1_absolute.png) / [SVG](scopus/fig1_absolute.svg)                   | [PNG](scopus/fig1_percent.png) / [SVG](scopus/fig1_percent.svg)                   |
+|                    | Absolute                                                                            | Percentage                                                                        | Data                                            |
+| ------------------ | ----------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- | ----------------------------------------------- |
+| **Without Galaxy** | [PNG](scopus/fig1_nogalaxy_absolute.png) / [SVG](scopus/fig1_nogalaxy_absolute.svg) | [PNG](scopus/fig1_nogalaxy_percent.png) / [SVG](scopus/fig1_nogalaxy_percent.svg) | [CSV](scopus/plot_data_nogalaxy.csv)            |
+| **With Galaxy**    | [PNG](scopus/fig1_absolute.png) / [SVG](scopus/fig1_absolute.svg)                   | [PNG](scopus/fig1_percent.png) / [SVG](scopus/fig1_percent.svg)                   | [CSV](scopus/plot_data_with_galaxy.csv)         |
 
 ### Other sources
 
@@ -26,7 +26,7 @@ The original figure (and methodology) is in the [published supplementary file][s
 | :------: | :--------: | :---: |
 | ![WfMS citation counts from OpenAlex, 2018-2025](openalex/fig1_nogalaxy_absolute.png) | ![WfMS citation counts from Dimensions, 2018-2025](dimensions/fig1_nogalaxy_absolute.png) | ![WfMS citation counts from iCite, 2018-2025](icite/fig1_nogalaxy_absolute.png) |
 | OpenAlex is slow to update, so the most recent year's citation counts will typically lag behind reality for several months after publication. | Snakemake counts are underrepresented: Dimensions splits F1000Research paper revisions into separate records, and only v1 of the Snakemake 2021 paper (311 citations) has per-year data — v2 (1,643 citations) has no per-year chart. See [Notes](#notes). | Limited to PubMed-indexed papers, so 4 papers without PMIDs (preprints, Figshare, some conference proceedings) are missing. |
-| [Plots & CSVs](openalex/) | [Plots & CSVs](dimensions/) | [Plots & CSVs](icite/) |
+| CSV: [with Galaxy](openalex/plot_data_with_galaxy.csv) / [no Galaxy](openalex/plot_data_nogalaxy.csv) — [all plots](openalex/) | CSV: [with Galaxy](dimensions/plot_data_with_galaxy.csv) / [no Galaxy](dimensions/plot_data_nogalaxy.csv) — [all plots](dimensions/) | CSV: [with Galaxy](icite/plot_data_with_galaxy.csv) / [no Galaxy](icite/plot_data_nogalaxy.csv) — [all plots](icite/) |
 
 ## Quick start
 
