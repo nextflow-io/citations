@@ -154,7 +154,7 @@ def generate_for_source(source_dir: Path, source_name: str):
 
 def main():
     base = Path(__file__).parent
-    for subdir, name in [("openalex", "OpenAlex"), ("dimensions", "Dimensions"), ("icite", "iCite")]:
+    for subdir, name in [("openalex", "OpenAlex"), ("dimensions", "Dimensions"), ("icite", "iCite"), ("scopus", "Scopus")]:
         source_dir = base / subdir
         if source_dir.exists():
             generate_for_source(source_dir, name)
