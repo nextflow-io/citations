@@ -1,8 +1,13 @@
 # WfMS Citation Analysis
 
-Regenerates Supplementary Figure 1 from "Empowering bioinformatics communities with
-Nextflow and nf-core" (Langer et al. 2025), showing per-year citation counts for
-bioinformatics workflow management systems.
+Regenerates Supplementary Figure 1 from [Langer et al. 2025, _Genome Biology_,
+"Empowering bioinformatics communities with Nextflow and nf-core"][paper] —
+per-year citation counts for bioinformatics workflow management systems.
+
+[paper]: https://doi.org/10.1186/s13059-025-03673-9
+[supplement]: https://static-content.springer.com/esm/art%3A10.1186%2Fs13059-025-03673-9/MediaObjects/13059_2025_3673_MOESM1_ESM.docx
+
+The original figure (and methodology) is in the [published supplementary file][supplement] (DOCX).
 
 ### Scopus (primary)
 
@@ -129,3 +134,7 @@ If `fetch_dimensions.py` breaks, use the Playwright MCP interactively:
 3. Click the "Citations" tab
 4. Extract data with JS: `window._Highcharts.charts.filter(c=>c)[0].series[0].data.map(p=>({year:p.category,citations:p.y}))`
 5. Repeat for each DOI
+
+## License
+
+Code and data in this repository are licensed under the [Apache License 2.0](LICENSE).
